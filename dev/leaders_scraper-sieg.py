@@ -43,7 +43,7 @@ def get_leaders():
             req = requests.get(f"{ROOT_URL}/leaders", params={"country": country}, cookies=cookie,)
 
             if req.status_code in [401, 403]:
-                print(f"🔄 Cookies expired while fetching {country}. Refreshing token...")
+                print(f"Cookies expired while fetching {country}; refreshing token")
                 cookie = get_cookie()
                 req = requests.get(f"{ROOT_URL}/leaders", params={"country": country}, cookies=cookie,)
 
@@ -51,10 +51,9 @@ def get_leaders():
             for leader in leaders:
                 if isinstance(leader, dict) and leader.get("wikipedia_url"):
                     wiki_url = leader["wikipedia_url"]
-                    print(f"🕵️ Scraping: {leader.get('first_name')} {leader.get('last_name')}")
+                    print(f"Scraping: {leader.get('first_name')} {leader.get('last_name')}")
                     leader["biography"] = get_first_paragraph(
-                        wiki_url, wiki_session
-                    )
+                        wiki_url, wiki_session)
                     leaders_data.append(leader)
 
     return leaders_data
@@ -64,7 +63,7 @@ def save(leaders_per_country):
     # save the final structure directly to disk
     with open("leaders.json", "w", encoding="utf-8") as f:
         json.dump(leaders_per_country, f, ensure_ascii=False, indent=4)
-    print("Data safely saved to leaders-sieg.json!")
+    print("Data saved to leaders-sieg.json")
 
 
 if __name__ == "__main__":
