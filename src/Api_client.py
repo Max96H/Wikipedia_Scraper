@@ -11,7 +11,7 @@ class CountryLeadersAPI:
         self.refresh_cookie()
 
     def refresh_cookie(self):
-        # On vérifie si le cookie est absent (Check validity) avant de demander un nouveau
+        
         if self.cookies is None:
             try:
                 response = requests.get(self.cookies_endpoint)
@@ -22,8 +22,7 @@ class CountryLeadersAPI:
     def get_countries(self):
         try:
             response = requests.get(self.country_endpoint, cookies=self.cookies)
-            
-            # Si le cookie a expiré (401 ou 403), on force le rafraîchissement
+                        
             if response.status_code == 401 or response.status_code == 403:
                 self.cookies = None # On réinitialise pour forcer refresh_cookie
                 self.refresh_cookie()
