@@ -60,9 +60,9 @@ if __name__ == "__main__":                      # run the code only if we launch
     if countries:                               # if countries in list, we fetch the 1st one, we call get_leaders('fr') to test and print how many leaders have been found: len(leaders).
 
 
-        test_country = countries[0]
+        test_country = countries[2]
         print(f"Fetching leaders for: {test_country}")
         leaders = client.get_leaders(test_country)
         print(f"Successfully fetched {len(leaders)} leaders for {test_country}.")
         if leaders:                 # if leaders, we take the 1st of the list and we take first and last name to validate (dict contains info)
-             print(f"First leader example: {leaders[0].get('first_name')} {leaders[0].get('last_name')}")
+             print(f"First leader exple: {leaders[0].get('first_name')} {leaders[0].get('last_name')}")

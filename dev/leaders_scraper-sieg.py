@@ -13,7 +13,7 @@ def get_cookie():
 
 def get_first_paragraph(wikipedia_url, session):
     
-    headers = {"User-Agent": "SiegriedSandboxProject/1.0 (siegca@hotmail.com)"}
+    headers = {"User-Agent": "SiegriedSandbox (siegca@hotmail.com)"}
     try:
         html_content = session.get(wikipedia_url, headers=headers, timeout=10).text
         soup = BeautifulSoup(html_content, "html.parser")
@@ -60,12 +60,12 @@ def get_leaders():
 
 
 def save(leaders_per_country):
-    # save the final structure directly to disk
+                                                # save the final structure directly to disk
     with open("leaders.json", "w", encoding="utf-8") as f:
         json.dump(leaders_per_country, f, ensure_ascii=False, indent=4)
     print("Data saved to leaders-sieg.json")
 
-
+#test
 if __name__ == "__main__":
     print("Starting Country Leaders Scraping")
     all_leaders = get_leaders()
