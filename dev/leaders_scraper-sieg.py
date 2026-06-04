@@ -63,7 +63,7 @@ def save(leaders_per_country):
                                                 # save the final structure directly to disk
     with open("leaders.json", "w", encoding="utf-8") as f:
         json.dump(leaders_per_country, f, ensure_ascii=False, indent=4)
-    print("Data saved to leaders-sieg.json")
+    print("Data saved to leaders.json")
 
 #test
 if __name__ == "__main__":
