@@ -10,9 +10,7 @@ def get_cookie():
     response = requests.get(cookie_url)
     return response.cookies
 
-
 def get_first_paragraph(wikipedia_url, session):
-    
     headers = {"User-Agent": "SiegriedSandbox (siegca@hotmail.com)"}
     try:
         html_content = session.get(wikipedia_url, headers=headers, timeout=10).text
