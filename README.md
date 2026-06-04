@@ -2,7 +2,7 @@
 
 This project is a modular web scraping pipeline written in Python. It automates data collection on national leaders by combining information from a REST API with biographical data extracted directly from Wikipedia pages.
 
-## 🚀 Key Features
+## Key Features
 
 - **Decoupled API Client:** Automatically handles session cookies, authentication, and token refreshes upon expiration.
 - **Robust HTML Scraper:** Extracts and cleans the primary biographical paragraphs from Wikipedia using BeautifulSoup and regex.

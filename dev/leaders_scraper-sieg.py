@@ -1,6 +1,6 @@
 import json
 import re
-import requests
+import requests                             
 from bs4 import BeautifulSoup
 
 ROOT_URL = "https://country-leaders.onrender.com"
