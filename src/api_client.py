@@ -4,9 +4,9 @@ class CountryLeadersAPI:
 
     def __init__(self, base_url="https://country-leaders.onrender.com"):  # constructor
         self.base_url = base_url                        # store var in object
-        self.country_endpoint = "/countries"
-        self.leaders_endpoint = "/leaders"
-        self.cookies_endpoint = "/cookie"
+        self.country_endpoint = f"{base_url}/countries"
+        self.leaders_endpoint = f"{base_url}/leaders"
+        self.cookies_endpoint = f"{base_url}/cookie"
         self.cookies = None
         self.refresh_cookie()
 
@@ -14,20 +14,20 @@ class CountryLeadersAPI:
                                                         # Check validity: only fetch a new cookie if we don't have one
         if self.cookies is None:
             try:                                        # search new cookie on server
-                response = requests.get(self.base_url + self.cookies_endpoint, timeout=10)
+                response = requests.get(self.cookies_endpoint, timeout=10)
                 self.cookies = response.cookies
             except Exception as e:
                 print(f"Error getting cookies: {e}")
 
     def get_countries(self):                            # fct to have the list of countries
         try:
-            response = requests.get(self.base_url + self.country_endpoint, cookies=self.cookies, timeout=10)
+            response = requests.get(self.country_endpoint, cookies=self.cookies, timeout=10)
                         
                                                         # if access denied or cookie expired
             if response.status_code == 401 or response.status_code == 403:  
                 self.cookies = None                     # reinitialize to force cookie refresh
                 self.refresh_cookie()                   # refresh cookie
-                response = requests.get(self.base_url + self.country_endpoint, cookies=self.cookies, timeout=10)
+                response = requests.get(self.country_endpoint, cookies=self.cookies, timeout=10)
                 
             return response.json()                      # return the list of countries as json         
         except Exception as e:
@@ -37,14 +37,14 @@ class CountryLeadersAPI:
     def get_leaders(self, country):                     # fct to get leaders, need of the code of country in parameter
         try:
             params = {"country": country}               # create dict params to see which country we want
-            response = requests.get(self.base_url + self.leaders_endpoint, params=params, cookies=self.cookies, timeout=10)
+            response = requests.get(self.leaders_endpoint, params=params, cookies=self.cookies, timeout=10)
             
                                                         # if cookie expired in the loop
             if response.status_code == 401 or response.status_code == 403:
                 print("Token expired, refreshing cookie...")
                 self.cookies = None
                 self.refresh_cookie()
-                response = requests.get(self.base_url + self.leaders_endpoint, params=params, cookies=self.cookies, timeout=10)
+                response = requests.get(self.leaders_endpoint, params=params, cookies=self.cookies, timeout=10)
             return response.json()
         except Exception as e:                          # convert answer in python and send it back. If network doesn't work: error and empty list
             print(f"Error getting leaders for {country}: {e}")
