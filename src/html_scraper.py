@@ -39,8 +39,7 @@ class WikipediaScraper():
                     first_paragraph = self.clean_text(str(p.text))
                     break
             if first_paragraph == "failed":
-                print(paragraphs[:10])
-                raise Exception("Couldn't find a paragraph containing <bold>")
+                raise Exception(f"Couldn't find a paragraph containing <bold> within : {paragraphs[:10]}")
         except Exception as ex:
             print("Something went wrong", ex)
         except BaseException as ex:
