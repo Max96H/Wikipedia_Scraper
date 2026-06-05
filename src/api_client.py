@@ -29,7 +29,7 @@ class CountryLeadersAPI:
                 self.refresh_cookie()                   # refresh cookie
                 response = requests.get(self.country_endpoint, cookies=self.cookies, timeout=10)
                 
-            return response.json()                      # return the list of countries         
+            return response.json()                      # return the list of countries as json         
         except Exception as e:
             print(f"Error getting countries: {e}")
             return []

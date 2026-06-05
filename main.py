@@ -1,4 +1,4 @@
-from src.Api_client import CountryLeadersAPI
+from src.api_client import CountryLeadersAPI
 from src.html_scraper import WikipediaScraper
 import argparse
 import requests
