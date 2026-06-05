@@ -1,5 +1,6 @@
 .venv/
-
+leaders.csv
+leaders.json
 para_test.txt
 paragraphs.txt
 wikipedia_scraper_env/

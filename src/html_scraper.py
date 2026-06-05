@@ -11,7 +11,7 @@ class WikipediaScraper():
         leader_wiki = ""
         try:
             #Using the opened session to scrape a wikipedia page
-            leader_wiki = self.session.get(url, headers={"User-Agent": "Mozilla/5.0"})
+            leader_wiki = self.session.get(url, headers={"User-Agent": "MyDataScraperBot/1.0 BasedOnPythonRequests"})
             match leader_wiki.status_code:
                 case 404:
                     raise Exception("Could not find this url")
@@ -49,7 +49,7 @@ class WikipediaScraper():
             return first_paragraph
     
     def clean_text(self, text: str):
-        problem_chars = ["Écouterⓘ", "\\[n 3\\]", "\\[\\w\\]","(uitspraakⓘ)", "uitspraakⓘ", "ⓘ", "\\n", "\\[\\d+\\]"]
+        problem_chars = ["Écouterⓘ", "\\[n 3\\]", "\\[\\w\\]","\\(uitspraakⓘ\\)", "uitspraakⓘ", "ⓘ", "\\n", "\\[\\d+\\]"]
         for char in problem_chars:
             text = re.sub(char, "", text)
         return text
@@ -58,6 +58,12 @@ class WikipediaScraper():
         with open(filepath, "w") as js_file:
             js_str = json.dumps(leaders)
             js_file.write(js_str)
+
+    def to_csv_file(self, filepath: str, leaders) -> None:
+        with open(filepath, "w") as csv_file:
+            for country, leads in leaders.items():
+                csv_file.write(f"{country}\n")
+                csv_file.write(",".join(map(str, leads)) + "\n")
 
 
 if __name__ == "__main__":

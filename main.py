@@ -1,8 +1,20 @@
-from src.api_client import CountryLeadersAPI
+from src.Api_client import CountryLeadersAPI
 from src.html_scraper import WikipediaScraper
+import argparse
 import requests
 
 def main():
+
+    parser = argparse.ArgumentParser(description="A wiki scraper to make json/csv file")
+    parser.add_argument('--file', type=str, default='json', help='The type of file to create (json|csv)')
+    args = parser.parse_args()
+
+    chose_csv = False
+    file = "leaders.json"
+    if args.file == "csv":
+        chose_csv = True
+        file = "leaders.csv"
+
     base_url = "https://country-leaders.onrender.com"
     country_leader_api = CountryLeadersAPI(base_url)
 
@@ -23,9 +35,13 @@ def main():
 
                 leaders_per_countries[country][i]["first_paragraph"] = wikipedia_scraper.get_first_paragraph(html)
 
-    js_file = "leaders.json"
 
-    wikipedia_scraper.to_json_file(js_file, leaders_per_countries)
+    if chose_csv:
+        wikipedia_scraper.to_csv_file(file, leaders_per_countries)
+        print(1)
+    else:
+        wikipedia_scraper.to_json_file(file, leaders_per_countries)
+        print(2)
 
 
 
