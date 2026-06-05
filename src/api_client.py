@@ -35,6 +35,7 @@ class CountryLeadersAPI:
                 print(f"Error getting cookies: {e}")
 
     def get_countries(self):                            # fct to have the list of countries
+        
         '''
         This is an instance method used to fetch supported countries.
         It takes no extra parameters except 'self'.

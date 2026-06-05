@@ -2,7 +2,6 @@
 
 This project is a modular Python web scraping pipeline built in 3 days. It automatically collects data on political leaders by combining a custom REST API client with a BeautifulSoup scraper that extracts summaries directly from Wikipedia pages.
 
-
 ## KEY FEATURES
 
 - **Dynamic File Exporter:** Built with the native argparse library, allowing the user to select the output format directly from the terminal using dedicated parameters. It can flatten nested data structures to generate a tabular .csv spreadsheet file ready for pandas, or export a standard structured .json database.
