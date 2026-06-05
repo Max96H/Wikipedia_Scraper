@@ -1,18 +1,8 @@
 import requests                                         # to send requests on internet
 
 class CountryLeadersAPI:
-    '''
-    This is a class that manages connections to the country leaders REST API.
-    It acts as the main blueprint to store endpoints, cookies, and internal session logic.
-    '''
 
     def __init__(self, base_url="https://country-leaders.onrender.com"):  # constructor
-        '''
-        This is the constructor method of the class.
-        It accepts an optional parameter: 'base_url' (string, with a default value).
-        Inside, it automatically calls the internal 'refresh_cookie' method.
-        '''
-        
         self.base_url = base_url                        # store var in object
         self.country_endpoint = f"{base_url}/countries"
         self.leaders_endpoint = f"{base_url}/leaders"
@@ -21,11 +11,6 @@ class CountryLeadersAPI:
         self.refresh_cookie()
 
     def refresh_cookie(self):  
-        '''
-        This is an internal instance method of the class.
-        It takes no arguments or parameters except the default 'self'.
-        It calls the external 'requests.get' method to fetch new authentication tokens.
-        '''
                                                         # Check validity: only fetch a new cookie if we don't have one
         if self.cookies is None:
             try:                                        # search new cookie on server
@@ -35,11 +20,6 @@ class CountryLeadersAPI:
                 print(f"Error getting cookies: {e}")
 
     def get_countries(self):                            # fct to have the list of countries
-        '''
-        This is an instance method used to fetch supported countries.
-        It takes no extra parameters except 'self'.
-        It internally calls 'requests.get' and invokes the 'self.refresh_cookie' method if access is denied.
-        '''
         try:
             response = requests.get(self.country_endpoint, cookies=self.cookies, timeout=10)
                         
@@ -55,11 +35,6 @@ class CountryLeadersAPI:
             return []
 
     def get_leaders(self, country):                     # fct to get leaders, need of the code of country in parameter
-        '''
-        This is an instance method used to fetch leaders for a specific nation.
-        It requires one mandatory parameter: 'country' (string representing the country code).
-        It calls 'requests.get' with query arguments and can invoke 'self.refresh_cookie' if needed.
-        '''
         try:
             params = {"country": country}               # create dict params to see which country we want
             response = requests.get(self.leaders_endpoint, params=params, cookies=self.cookies, timeout=10)
@@ -78,11 +53,6 @@ class CountryLeadersAPI:
 
 # test
 if __name__ == "__main__":                              # run the code only if we launch the file api_client.py (ignore if in main...)
-    '''
-    This is the main execution block for local script testing.
-    It instantiates the 'CountryLeadersAPI' class and saves the object into the 'client' variable.
-    It calls the object methods 'get_countries' and 'get_leaders' using local test variables as arguments.
-    '''
     print("Testing CountryLeadersAPI...")
     client = CountryLeadersAPI()                        # msg and creation of object client, so call of the constructor and search 1st cookie
     
