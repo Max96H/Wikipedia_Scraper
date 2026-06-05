@@ -24,8 +24,10 @@ def main():
                 leaders_per_countries[country][i]["first_paragraph"] = wikipedia_scraper.get_first_paragraph(html)
 
     js_file = "leaders.json"
+    csv_file = "leaders.csv"
 
     wikipedia_scraper.to_json_file(js_file, leaders_per_countries)
+    wikipedia_scraper.to_csv_file(csv_file, leaders_per_countries)
 
 
 
