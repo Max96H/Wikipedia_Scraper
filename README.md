@@ -13,18 +13,18 @@ This project is a modular Python web scraping pipeline built in 3 days. It autom
 ## PROJECT STRUCTURE
 
 ```
-wikipdia-scraper/
+wikipedia-scraper/
+├── dev/
+│   ├── max_sandbox_notebooook.ipynb
+│   └── siegried_sandbox_notebooook.ipynb
+├── src/
+│   ├── __init__.py
+│   ├── api_client.py
+│   └── html_scraper.py
 ├── .gitignore
 ├── README.md
-├── requirements.txt
 ├── main.py
-├── dev/
-│   ├── max_sandbox.ipynb
-│   └── siegried_sandbox.ipynb
-└── src/
-├── __init__.py
-├── api_client.py
-└── html_scraper.py
+└── requirements.txt
 ```
 
 ## HOW TO SETUP AND RUN
@@ -96,21 +96,23 @@ This file contains the CountryLeadersAPI class. Its main job is to fetch raw JSO
 This file handles the WikipediaScraper class. To avoid overloading the network, it reuses the same requests.Session object created by the main script. The get_first_paragraph method uses BeautifulSoup to search the first 10 paragraphs of the page. It looks for a bold tag () which usually contains the leader's name, meaning it found the actual introduction. The clean_text method uses regex (re.sub) to strip out annoying Wikipedia artifacts like citation brackets (e.g., [1], [n 3]), extra newlines (\n), or the speaker icon (Écouterⓘ).
 
 ### Integration (main.py)
-This is the central script. It coordinates the whole pipeline: it calls the API client to map out the target countries, fetches the leaders, loops through their Wikipedia URLs, uses the scraper to append the text summary to each leader, and finally saves everything into a JSON file.
+This is the central script. It coordinates the whole pipeline: it calls the API client to map out the target countries, fetches the leaders, loops through their Wikipedia URLs, uses the scraper to append the text summary to each leader, and finally saves everything into a JSON or csv file.
 
 ```
- {
-        "id": "Q329",
-        "first_name": "Nicolas",
-        "last_name": "Sarkozy",
-        "birth_date": "1955-01-28",
-        "death_date": null,
-        "place_of_birth": "Paris",
-        "wikipedia_url": "https://fr.wikipedia.org/wiki/Nicolas_Sarkozy",
-        "start_mandate": "2007-05-16",
-        "end_mandate": "2012-05-15",
-        "biography": "Nicolas Sarközy de Nagy-Bocsa, dit Nicolas Sarkozy (/ni.kɔ.la saʁ.kɔ.zi/ Écouterⓘ ; en hongrois Sárközy ou Sárközi ,,), né le 28 janvier 1955 à Paris 17e (Seine), est un homme d'État français. Il est président de la République française du 16 mai 2007 au 15 mai 2012."
+ {"fr": [{"id": "Q157", "first_name": "Fran\u00e7ois", "last_name": "Hollande", "birth_date": "1954-08-12", au 15 mai 2012............"}]
     },
+```
+```
+fr
+{'id': 'Q157', 'first_name': 'François', 'last_name': 'Hollande', 'birth_date': '1954-08-12',
+us
+{'id': 'Q23', 'first_name': 'George', 'last_name': 'Washington', 'birth_date': '1732-02-22', '
+be
+{'id': 'Q12978', 'first_name': 'Guy', 'last_name': 'Verhofstadt', 'birth_date': '1953-04-11',
+ma
+{'id': 'Q57553', 'first_name': 'Mohammed', 'last_name': 'None', 'birth_date': '1963-08-21', 'd
+ru
+{'id': 'Q7747', 'first_name': 'Vladimir', 'last_name': 'Putin', 'birth_date': '1952-10-07', 'd
 ```
 
 ## GIT FLOW & COLLABORATION
