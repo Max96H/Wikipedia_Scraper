@@ -13,18 +13,18 @@ This project is a modular Python web scraping pipeline built in 3 days. It autom
 ## PROJECT STRUCTURE
 
 ```
-wikipdia-scraper/
+wikipedia-scraper/
+├── dev/
+│   ├── max_sandbox_notebooook.ipynb
+│   └── siegried_sandbox_notebooook.ipynb
+├── src/
+│   ├── __init__.py
+│   ├── api_client.py
+│   └── html_scraper.py
 ├── .gitignore
 ├── README.md
-├── requirements.txt
 ├── main.py
-├── dev/
-│   ├── max_sandbox.ipynb
-│   └── siegried_sandbox.ipynb
-└── src/
-├── __init__.py
-├── api_client.py
-└── html_scraper.py
+└── requirements.txt
 ```
 
 ## HOW TO SETUP AND RUN
@@ -42,38 +42,51 @@ If you want to test the components separately, you can run them individually. Fo
 
 ```
 def main():
+    """
+    Main function of this wiki scraper project
+    """
 
+    #Create an ArgumentParser Object 
     parser = argparse.ArgumentParser(description="A wiki scraper to make json/csv file")
+    #Add argument '--file'
     parser.add_argument('--file', type=str, default='json', help='The type of file to create (json|csv)')
+    #Parse the command line arguments
     args = parser.parse_args()
 
+    #Establish if we are gonna output a json file or a csv file depending on the command line arguments
     chose_csv = False
     file = "leaders.json"
     if args.file == "csv":
         chose_csv = True
         file = "leaders.csv"
 
+    #Create a CountryLeadersAPI with our chosen api
     base_url = "https://country-leaders.onrender.com"
     country_leader_api = CountryLeadersAPI(base_url)
 
+    #Getting a list of countries from the api
     countries = country_leader_api.get_countries()
 
+    #Making a dictionary, keys = countries and values = leaders (list of dictionaries obtained from the api)
     leaders_per_countries = {}
     for country in countries:
         leaders = country_leader_api.get_leaders(country)
 
         leaders_per_countries[country] = leaders
 
+    #Opening a Session Object to make the requests to wikipedia within one session (speeds things up)
     with requests.Session() as session:
+        #Making the WikipediaScraper Object with the session
         wikipedia_scraper = WikipediaScraper(session)
 
+        #Going through each leader to add a paragraph from their wikipedia page
         for country, leaders in leaders_per_countries.items():
             for i, leader in enumerate(leaders):
                 html = wikipedia_scraper.fetch_html(leader["wikipedia_url"])
 
                 leaders_per_countries[country][i]["first_paragraph"] = wikipedia_scraper.get_first_paragraph(html)
 
-
+    #Creating either a csv or json file with the leaders per countries
     if chose_csv:
         wikipedia_scraper.to_csv_file(file, leaders_per_countries)
         print(1)
@@ -96,21 +109,23 @@ This file contains the CountryLeadersAPI class. Its main job is to fetch raw JSO
 This file handles the WikipediaScraper class. To avoid overloading the network, it reuses the same requests.Session object created by the main script. The get_first_paragraph method uses BeautifulSoup to search the first 10 paragraphs of the page. It looks for a bold tag () which usually contains the leader's name, meaning it found the actual introduction. The clean_text method uses regex (re.sub) to strip out annoying Wikipedia artifacts like citation brackets (e.g., [1], [n 3]), extra newlines (\n), or the speaker icon (Écouterⓘ).
 
 ### Integration (main.py)
-This is the central script. It coordinates the whole pipeline: it calls the API client to map out the target countries, fetches the leaders, loops through their Wikipedia URLs, uses the scraper to append the text summary to each leader, and finally saves everything into a JSON file.
+This is the central script. It coordinates the whole pipeline: it calls the API client to map out the target countries, fetches the leaders, loops through their Wikipedia URLs, uses the scraper to append the text summary to each leader, and finally saves everything into a JSON or csv file.
 
 ```
- {
-        "id": "Q329",
-        "first_name": "Nicolas",
-        "last_name": "Sarkozy",
-        "birth_date": "1955-01-28",
-        "death_date": null,
-        "place_of_birth": "Paris",
-        "wikipedia_url": "https://fr.wikipedia.org/wiki/Nicolas_Sarkozy",
-        "start_mandate": "2007-05-16",
-        "end_mandate": "2012-05-15",
-        "biography": "Nicolas Sarközy de Nagy-Bocsa, dit Nicolas Sarkozy (/ni.kɔ.la saʁ.kɔ.zi/ Écouterⓘ ; en hongrois Sárközy ou Sárközi ,,), né le 28 janvier 1955 à Paris 17e (Seine), est un homme d'État français. Il est président de la République française du 16 mai 2007 au 15 mai 2012."
+ {"fr": [{"id": "Q157", "first_name": "Fran\u00e7ois", "last_name": "Hollande", "birth_date": "1954-08-12", au 15 mai 2012............"}]
     },
+```
+```
+fr
+{'id': 'Q157', 'first_name': 'François', 'last_name': 'Hollande', 'birth_date': '1954-08-12',
+us
+{'id': 'Q23', 'first_name': 'George', 'last_name': 'Washington', 'birth_date': '1732-02-22', '
+be
+{'id': 'Q12978', 'first_name': 'Guy', 'last_name': 'Verhofstadt', 'birth_date': '1953-04-11',
+ma
+{'id': 'Q57553', 'first_name': 'Mohammed', 'last_name': 'None', 'birth_date': '1963-08-21', 'd
+ru
+{'id': 'Q7747', 'first_name': 'Vladimir', 'last_name': 'Putin', 'birth_date': '1952-10-07', 'd
 ```
 
 ## GIT FLOW & COLLABORATION
